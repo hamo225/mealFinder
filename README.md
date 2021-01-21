@@ -4,6 +4,8 @@
 ## Initial Project Guidlines
 ### Uses meal Finder API to access meals and their recipes, ingredients and picture. 
 ### Users will be able to seach for meals names or keywords
+### random meal button
+### Fetch API
 
 ## Further Functionality
 ### Users should also be able to list ingredients they have and then a meal recipe is recommended based on that
