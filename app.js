@@ -47,10 +47,81 @@ function searchMeal(e) {
   } else {
     alert(`please enter search term`);
   }
-  //  hit the end point
+}
 
-  // loop through them and then putput in the dom
+// Add meal to DOM
+function addMealToDom(meal) {
+  const ingredients = [];
+
+  for (let i = 1; i <= 20; i++) {
+    if (meal[`strIngredient${i}`]) {
+      ingredients.push(
+        `${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`
+      );
+    } else {
+      break;
+    }
+  }
+  console.log(ingredients);
+
+  single_mealEl.innerHTML = `
+  <div class="single-meal">
+  
+  <h1>${meal.strMeal}</h1>
+  <img src="${meal.strMealThumb}" alt="${meal.strMeal}"/>
+  <div class="single-meal-info">
+  ${meal.strCategory ? `<p>${meal.strCategory}</p>` : ''}
+  ${meal.strArea ? `<p>${meal.strArea}</p>` : ''}
+
+
+  </div>
+
+  <div class="main">
+  
+  <p>Instructions: ${meal.strInstructions}</p>
+  <h2> Ingredients</h2>
+  <ul>
+  ${ingredients
+    .map((ing) => {
+      return `<li>${ing}</li>`;
+    })
+    .join('')}
+  
+  </ul>
+  ${meal.strSource ? `<p>Source: ${meal.strSource}</p>` : ''}
+  ${meal.strYoutube ? `<p>Video: ${meal.strYoutube}</p>` : ''}
+  </div>
+  </div>`;
+}
+
+// Fetch Meal info by ID
+function getMealById(mealID) {
+  fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}
+`)
+    .then((res) => res.json())
+    .then((data) => {
+      const meal = data.meals[0];
+      addMealToDom(meal);
+      console.log(meal);
+    });
 }
 
 // Event listeners
 submit.addEventListener('submit', searchMeal);
+
+mealsEl.addEventListener('click', (e) => {
+  e.preventDefault();
+  // run through each item in .meals element, if item has a classlist then will return only the item with a class list of "meal-info"
+  const mealInfo = e.path.find((item) => {
+    if (item.classList) {
+      return item.classList.contains(`meal-info`);
+    } else {
+      return false;
+    }
+  });
+
+  if (mealInfo) {
+    const mealID = mealInfo.getAttribute('data-mealid');
+    getMealById(mealID);
+  }
+});
