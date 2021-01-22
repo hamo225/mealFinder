@@ -4,6 +4,17 @@ const random = document.getElementById('random');
 const mealsEl = document.getElementById('meals');
 const resultHeading = document.getElementById('result-heading');
 const single_mealEl = document.getElementById('single-meal');
+const randomOnPageLoad = document.getElementById('randomOnPageLoad');
+const reset = document.getElementById('reset');
+
+fetch(`https://www.themealdb.com/api/json/v1/1/random.php
+  `)
+  .then((res) => res.json())
+  .then((data) => {
+    const meal = data.meals[0];
+    addMealToDom(meal);
+    randomOnPageLoad.innerHTML = `<h2>You might like this:</h2>`;
+  });
 
 // Search Meal and Fetch from API
 function searchMeal(e) {
@@ -12,6 +23,7 @@ function searchMeal(e) {
 
   //  Clear single Meal
   single_mealEl.innerHTML = '';
+  randomOnPageLoad.innerHTML = '';
 
   // Get Search input term
   const term = search.value;
@@ -47,6 +59,8 @@ function searchMeal(e) {
     alert(`please enter search term`);
   }
 }
+
+// FUNCTIONS
 
 // Add meal to DOM
 function addMealToDom(meal) {
@@ -92,7 +106,6 @@ function addMealToDom(meal) {
   </div>
   </div>`;
 }
-
 // Fetch Meal info by ID
 function getMealById(mealID) {
   fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}
@@ -104,12 +117,12 @@ function getMealById(mealID) {
       console.log(meal);
     });
 }
-
 // Random Meal Fetch
 function getRandomMeal(meal) {
   //   clear meals and headings
   mealsEl.innerHTML = '';
   resultHeading.innerHTML = '';
+  randomOnPageLoad.innerHTML = '';
 
   fetch(`https://www.themealdb.com/api/json/v1/1/random.php
   `)
@@ -119,11 +132,29 @@ function getRandomMeal(meal) {
       addMealToDom(meal);
     });
 }
+// Fetch Categories
+function getCategories(meal) {
+  const categories = [];
 
-// Event listeners
+  fetch(`https://www.themealdb.com/api/json/v1/1/list.php?c=list`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+    });
+}
+// Fetch Filter by Categories
+function filterByCategory(e) {
+  fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood
+  `)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+    });
+}
+
+// EVENT LISTENERS
 submit.addEventListener('submit', searchMeal);
 random.addEventListener('click', getRandomMeal);
-
 mealsEl.addEventListener('click', (e) => {
   e.preventDefault();
   // run through each item in .meals element, if item has a classlist then will return only the item with a class list of "meal-info"
@@ -140,3 +171,15 @@ mealsEl.addEventListener('click', (e) => {
     getMealById(mealID);
   }
 });
+reset.addEventListener('click', () => {
+  mealsEl.innerHTML = '';
+  resultHeading.innerHTML = '';
+  single_mealEl.innerHTML = '';
+  randomOnPageLoad.innerHTML = '';
+});
+
+// get categories and put them into a list
+// loop through the categores data and create the html template
+
+// select the item you want
+// option to filter by category

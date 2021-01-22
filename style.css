@@ -6,7 +6,7 @@ html body {
   padding: 0;
   margin: 0;
   height: 100vh;
-  color: white;
+  color: black;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -141,6 +141,10 @@ input:focus {
   font-weight: bold;
   padding: 5px;
   margin: 1px 5px 5px 1px;
+}
+
+#randomOnPageLoad {
+  margin-top: 20px;
 }
 
 @media (max-width: 800px) {
